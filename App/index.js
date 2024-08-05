@@ -1,53 +1,62 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+// Filename: index.js
+// Combined code from all files
 
-const App = () => {
-  const fullText = 'Hi, this is Apply.\nCreating mobile apps is now as simple as typing text.\nJust input your idea and press APPLY, and our platform does the rest...';
-  const [displayedText, setDisplayedText] = useState('');
-  const [index, setIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
+import React, { useState } from 'react';
+import { SafeAreaView, StyleSheet, Text, Button, View, ScrollView } from 'react-native';
 
-  useEffect(() => {
-    if (isPaused) return;
+const letters = [
+  "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+  "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
+];
 
-    const interval = setInterval(() => {
-      setDisplayedText((prev) => prev + fullText[index]);
-      setIndex((prev) => {
-        if (prev === fullText.length - 1) {
-          setIsPaused(true);
-          setTimeout(() => {
-            setDisplayedText('');
-            setIndex(0);
-            setIsPaused(false);
-          }, 2000);
-          return 0;
-        }
-        return prev + 1;
-      });
-    }, 100);
+export default function App() {
+  const [currentLetterIndex, setCurrentLetterIndex] = useState(0);
 
-    return () => clearInterval(interval);
-  }, [index, isPaused]);
+  const nextLetter = () => {
+    if (currentLetterIndex < letters.length - 1) {
+      setCurrentLetterIndex(currentLetterIndex + 1);
+    } else {
+      setCurrentLetterIndex(0); // Reset to first letter
+    }
+  };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>{displayedText}</Text>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollView}>
+        <View style={styles.box}>
+          <Text style={styles.letter}>{letters[currentLetterIndex]}</Text>
+          <Button title="Next" onPress={nextLetter} />
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: 50,
+    backgroundColor: '#F5F5F5',
+  },
+  scrollView: {
+    flexGrow: 1,
     justifyContent: 'center',
-    backgroundColor: 'black',
+    alignItems: 'center',
+  },
+  box: {
+    backgroundColor: '#FFFFFF',
     padding: 20,
+    borderRadius: 15,
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    shadowOffset: { width: 0, height: 2 },
+    alignItems: 'center',
+    width: '80%',
   },
-  text: {
-    color: 'white',
-    fontSize: 24,
-    fontFamily: 'monospace',
-  },
+  letter: {
+    fontSize: 100,
+    fontWeight: 'bold',
+    marginBottom: 40,
+  }
 });
-
-export default App;
